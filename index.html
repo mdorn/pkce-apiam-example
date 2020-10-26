@@ -1,16 +1,16 @@
 <html>
 <head>
-<title>OAuth Authorization Code + PKCE in Vanilla JS</title>
+<title>Okta PKCE API AM Example</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <script>
 // Configure your application and authorization server details
 var config = {
-    client_id: "0oauowngcg9CAWG6G0h7",
-    redirect_uri: "http://localhost:8000/",
-    authorization_endpoint: "https://udp-tmd3-994.oktapreview.com//oauth2/ausuo7cvhrwYYvVCG0h7/v1/authorize",
-    token_endpoint: "https://udp-tmd3-994.oktapreview.com/oauth2/ausuo7cvhrwYYvVCG0h7/v1/token",
+    client_id: "",
+    redirect_uri: "http://APP_DOMAIN/",
+    authorization_endpoint: "https://SUBDOMAIN.okta.com//oauth2/AUTHN_SVR_ID/v1/authorize",
+    token_endpoint: "https://SUBDOMAIN.okta.com/oauth2/AUTHN_SVR_ID/v1/token",
     requested_scopes: "orders:read:user",
-    api_url: "https://tmd3.kotter.stg.unidemo.info/api/orders/"
+    api_url: "https://API_DOMAIN/api/orders/"
 };
 </script>
 <style>
