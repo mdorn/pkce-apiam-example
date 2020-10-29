@@ -11,79 +11,70 @@ var config = {
     token_endpoint: "https://SUBDOMAIN.okta.com/oauth2/AUTHN_SVR_ID/v1/token",
     requested_scopes: "orders:read:user",
     api_url: "https://API_DOMAIN/api/orders/"
+    site_name: "Okta Demo"
 };
 </script>
-<style>
-body {
-  padding: 0;
-  margin: 0;
-  min-height: 100vh;
-  font-family: arial, sans-serif;
-}
-@media(max-width: 400px) {
-  body {
-    padding: 10px;
-  }
-}
-.full-height {
-  min-height: 100vh;
-}
-.flex-center {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-.content {
-  max-width: 400px;
-}
-h2 {
-  text-align: center;
-}
-.code {
-  font-family: "Courier New", "Courier", monospace;
-  width: 100%;
-  padding: 4px;
-  border: 1px #ccc solid;
-  border-radius: 4px;
-  word-break: break-all;
-}
-.hidden {
-  display: none;
-}
-button {
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}
-</style>
+<link href="/style.css" rel="stylesheet">
 </head>
 <body>
 <div class="flex-center full-height">
     <div class="content">
         <h1>LookAtTheStuffIBought.com</h1>
-        <h2>Hello Authenticated User!</h2>
-        <p id="intro_msg">Use this website to show your friends the stuff you bought on other websites.<br /><br />
-        Click button below to authorize this application to get your Portfolio data from <strong>Okta Demo App</strong>.</p><br />
-        <p style="text-align:center"><button id="start">Authorize</button></p>
-        <div id="token" class="hidden">
-            <h3 class="hidden">Access Token</h3>
-            <div id="access_token" class="code hidden"></div>
-            <h3>User Data from <strong>Okta Demo App</strong> API</h3>
-            <h4><div id="data"></div></h4>
+
+        <div id="intro">
+          <div id="login" class="hidden">
+            <p style="text-align:center">
+              <input type="button" onclick="location.href='/login.html';" value="Log In" />
+            </p>
+          </div>
+
+          <div id="hello" class="hidden">
+              <h2>Hello <span id="uid">Authenticated User!</span></h2>
+              <p id="intro_msg">Use this website to show your friends the stuff you bought on other websites.<br /><br />
+              Click button below to authorize this application to get your Portfolio data from <strong class="site-name">Okta Demo App</strong>.</p><br />
+              <p style="text-align:center"><button id="start">Authorize</button></p>
+          </div>
         </div>
+
+        <div id="token" class="hidden">
+          <h3 class="hidden">Access Token</h3>
+          <div id="access_token" class="code hidden"></div>
+          <h3>User Data from <strong class="site-name">Okta Demo App</strong> API</h3>
+          <h4><div id="data"></div></h4>
+        </div>
+
         <div id="error" class="hidden">
             <h2>Error</h2>
             <div id="error_details" class="code"></div>
         </div>
+
     </div>
 </div>
 
 <script>
+
+window.addEventListener('load', function(event) {
+  var site_name = document.getElementsByClassName("site-name");
+  var i;
+  for (i = 0; i < site_name.length; i++) {
+    site_name[i].innerHTML = config.site_name;
+  }
+  var queryString = window.location.search;
+  var urlParams = new URLSearchParams(queryString);
+  var uid = urlParams.get('uid');
+  var uidElem = document.getElementById("uid");
+  var helloElem = document.getElementById("hello");
+  var loginElem = document.getElementById("login");
+  var dataElem = document.getElementById("data");
+  if (!uid) {
+    helloElem.classList = 'hidden';
+    loginElem.classList = '';
+  } else {
+    loginElem.classList = 'hidden';
+    helloElem.classList = '';
+  }
+  uidElem.innerHTML = uid;
+});
 
 function ajax(url, method, data, callback, accessToken) {
   var req = new XMLHttpRequest();
@@ -213,9 +204,8 @@ if(q.code) {
             // Initialize your application now that you have an access token.
             // Here we just display it in the browser.
             document.getElementById("access_token").innerText = body.access_token;
-            document.getElementById("start").classList = "hidden";
+            document.getElementById("intro").classList = "hidden";
             document.getElementById("token").classList = "";
-            document.getElementById("intro_msg").classList = "hidden";
             getUserData();
 
             // Replace the history entry to remove the auth code from the browser address bar
